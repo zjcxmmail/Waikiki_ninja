@@ -1,12 +1,22 @@
-# Ninja
+# Ninja 
 
-原作者：@MoonBegonia
+基本功能已完善，鸽几天，有问题先仔细看此README，有需求可以提PR
+
+## 致谢
+
+感谢Ninja原作者：@MoonBegonia
 
 仓库地址：https://github.com/MoonBegonia/ninja
 
-当前：支持CK注册和登录
+感谢WSCK功能原作者：@huiyi9420
 
-更新：CK登录 可以新增账号 输入新CK 1)显示`欢迎回来XXX`证明更新成功  2)显示`注册成功XXX`证明注册成功，但是不能跳转
+仓库地址：https://github.com/huiyi9420/ninja
+
+## 特性
+
+当前：支持CK注册，登录和删除，支持WSKEY录入和删除，登录成功进入个人中心，可修改备注。默认登录CK才可提交WSCK，主页提交WSCK容易乱，不建议。
+
+新特性：支持Github Action前端编译并自动替换文件。Fork之后：Action->BuildAndCommit->Run workflow->Run workfilow即可。
 
 ## 说明
 
@@ -15,6 +25,18 @@ Ninja 仅供学习参考使用，请于下载后的 24 小时内删除，本人�
 Ninja 仅支持 qinglong 2.8.2+
 
 [TG 频道](https://t.me/joinchat/sHKuteb_lfdjNmZl)
+
+## 特性
+
+- [x] 局域网扫码，跳转登录添加/更新 cookie
+- [x] 添加/更新 cookie 后发送通知
+- [x] 扫码发送通知可关闭
+- [x] 默认备注为账号
+- [x] 可修改备注
+- [x] wskey有效性检测
+- [x] 登录界面展示自定义标语
+- [x] Github Action自动编译
+- [x] WSKEY录入
 
 ## 文档
 
@@ -77,6 +99,7 @@ Ninja 仅支持 qinglong 2.8.2+
    git clone https://github.com/Waikkii/waikiki_ninja.git /ql/ninja
    cd /ql/ninja/backend
    pnpm install
+   cp .env.example .env # 如有需要, 修改.env
    pm2 start
    cp sendNotify.js /ql/scripts/sendNotify.js
    ```
@@ -123,11 +146,17 @@ QL_URL=http://localhost:5700
 
 目前支持的环境变量有：
 
+- `SHOW_QR`：是否显示扫码卡片，默认不显示
+- `SHOW_WSCK`：是否显示WSCK录入，默认不显示
+- `SHOW_CK`：是否显示CK登录，默认不显示
+- `ALLOW_WSCK_ADD`：是否允许添加WSCK账号 不允许添加时则只允许已有账号登录
+- `ALLOW_WSCK_NUM`：允许添加WSCK账号的最大数量
 - `ALLOW_ADD`: 是否允许添加账号 不允许添加时则只允许已有账号登录（默认 `true`）
-- `ALLOW_NUM`: 允许添加账号的最大数量（默认 `40`）
+- `ALLOW_NUM`: 允许添加账号的最大数量（默认 `45`）
 - `NINJA_PORT`: Ninja 运行端口（默认 `5701`）
 - `NINJA_NOTIFY`: 是否开启通知功能（默认 `true`）
 - `NINJA_UA`: 自定义 UA，默认为随机
+- 
 
 配置方式：
 
@@ -148,7 +177,7 @@ pm2 start
 
 ### Ninja 自定义
 
-自定义推送二维码：将 `push.jpg` 文件添加到 `/ql/ninja/backend/static/` 目录下刷新网页即可。
+（未完成）自定义推送二维码：将 `push.jpg` 文件添加到 `/ql/ninja/backend/static/` 目录下刷新网页即可。
 
 自定义常见活动：修改 `/ql/backend/static/activity.json` 即可
 
@@ -160,13 +189,20 @@ pm2 start
 
 - Qinglong 需要在登录状态（`auth.json` 中有 token）
 
-## 常见问题
+## 如何更新Ninja
 
-Q：为什么我 `git pull` 失败？  
-A：一般是修改过文件，先运行一次 `git checkout .` 再 `git pull`。还是不行就删了重拉。
+```bash
+cd /ql/ninja
+git checkout .
+git pull
+pm2 start
+```
 
-Q：为什么访问不了？  
-A：一般为端口映射错误/失败，请自行检查配置文件。
+## 如何删除Ninja
 
-Q：为什么访问白屏？  
-A：使用现代的浏览器，而不是古代的。
+```bash
+cd /ql/ninja
+pm2 delete ninja
+rm -rf *
+rm -r ./.*
+```
